@@ -3,6 +3,7 @@
 namespace apiend\modules\v1\controllers;
 
 use apiend\controllers\ApiController;
+use apiend\modules\v1\actions\vk\GetCourseDetail;
 use apiend\modules\v1\actions\vk\GetHomeData;
 use apiend\modules\v1\actions\vk\GetTopicDetail;
 
@@ -19,11 +20,13 @@ class VkController extends ApiController
         $behaviors = parent::behaviors();
         $behaviors['authenticator']['optional'] = [
             'get-home-data',
-            'get-topic-detail',
+            'get-course-detail',
+            'get-topic-detail'
         ];
         $behaviors['verbs']['actions'] = [
             'get-home-data' => ['get'],
-            'get-topic-detail' => ['get'],
+            'get-course-detail' => ['get'],
+            'get-topic-detail' => ['get']
         ];
         return $behaviors;
     }
@@ -35,7 +38,8 @@ class VkController extends ApiController
     {
         return [
             'get-home-data' => ['class' => GetHomeData::class],
-            'get-topic-detail' => ['class' => GetTopicDetail::class],
+            'get-course-detail' => ['class' => GetCourseDetail::class],
+            'get-topic-detail' => ['class' => GetTopicDetail::class]
         ];
     }
 
