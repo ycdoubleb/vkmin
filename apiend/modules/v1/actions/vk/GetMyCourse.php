@@ -22,14 +22,19 @@ class GetMyCourse extends BaseAction
 
     public function run()
     {
+        // 用户id
         $user_id = $this->getSecretParam('user_id');
+        // 当前页
+        $page = $this->getSecretParam('page', 1);
+        // 返回个数
+        $limit = $this->getSecretParam('limit', 6);
 
         /**
          * 返回 专题数据，专题里面的课程数据
          */
         $data = [
             'learnLog' => $this->getLearningLog($user_id),
-            'courses' => $this->getMyCourses($user_id)
+            'courses' => $this->getMyCourses($user_id, $page, $limit)
         ];
 
         return new Response(Response::CODE_COMMON_OK, null, $data);
@@ -51,17 +56,21 @@ class GetMyCourse extends BaseAction
     
     /**
      * 获取所有我的课程
-     * @param int $topic_id
+     * @param int $user_id
+     * @param int $page
+     * @param int $limit
      * @return array
      */
-    private function getMyCourses($user_id)
+    private function getMyCourses($user_id, $page, $limit)
     {
         $courses = CourseLearning::find()->select([
-            'Course.id', 'Course.name', 'Course.url','Course.cover_url AS thumb',
-            'ROUND(learning_time / 60, 2) AS learning_time',
-            "FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i') AS start_time"
-        ])->leftJoin(['Course' => Course::tableName()], 'Course.id = course_id')
-        ->where(['user_id' => $user_id,'is_del' => 0])->asArray()->all();
+                'Course.id', 'Course.name', 'Course.url','Course.cover_url AS thumb',
+                'ROUND(learning_time / 60, 0) AS learning_time',
+                "FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i') AS start_time"
+            ])->leftJoin(['Course' => Course::tableName()], 'Course.id = course_id')
+            ->where(['user_id' => $user_id,'is_del' => 0])
+            ->offset(($page - 1) * $limit)->limit($limit)
+            ->asArray()->all();
 
         return $courses;
     }

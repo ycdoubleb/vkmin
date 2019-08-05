@@ -49,11 +49,11 @@ class GetHomeData extends BaseAction
     private function  getRecommendCourses()
     {
         $course = Course::find()->select([
-            'id', 'cover_url AS thumb', 'name',
-            'teacher_name','learning_count','url'
-        ])->where([
-            'is_recommend' => 1, 'is_publish' => 1
-        ])->limit(4)->asArray()->all();
+                'id', 'cover_url AS thumb', 'name',
+                'teacher_name','learning_count','url'
+            ])->where([
+                'is_recommend' => 1, 'is_publish' => 1
+            ])->limit(4)->asArray()->all();
         
         return $course;
     }
@@ -65,11 +65,11 @@ class GetHomeData extends BaseAction
     private function getTopics()
     {
         $topics = TopicCourse::find()->select([
-            'Topic.id', 'Topic.name', 'Topic.cover_url AS thumb', 'COUNT(course_id) AS couNum'
-        ])->leftJoin(['Topic' => Topic::tableName()], 'Topic.id = topic_id')
-        ->where(['is_del' => 0])
-        ->groupBy(['topic_id'])->limit(8)
-        ->asArray()->all();
+                'Topic.id', 'Topic.name', 'Topic.cover_url AS thumb', 'COUNT(course_id) AS couNum'
+            ])->leftJoin(['Topic' => Topic::tableName()], 'Topic.id = topic_id')
+            ->where(['is_del' => 0])
+            ->groupBy(['topic_id'])->limit(8)
+            ->asArray()->all();
         
         return $topics;
     }

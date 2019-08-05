@@ -27,13 +27,14 @@ class GetSearchInfo extends BaseAction
         $params = [
           'keyword' => $this->getSecretParam('keyword', ''),
           'search_type' => $this->getSecretParam('search_type', ''),
+          'page' => $this->getSecretParam('page', 1),
+          'limit' => $this->getSecretParam('limit', 6)
         ];
-        
         /**
          * 返回 专题数据，专题里面的课程数据
          */
         $data = [
-            'resultList' => $this->getSearchResultList($params),
+            'results' => $this->getSearchResultList($params),
         ];
 
         return new Response(Response::CODE_COMMON_OK, null, $data);
@@ -50,6 +51,10 @@ class GetSearchInfo extends BaseAction
         $name = urldecode(ArrayHelper::getValue($paramse, 'keyword', ''));
         // 搜索类型
         $searchType = urldecode(ArrayHelper::getValue($paramse, 'search_type', ''));
+        // 当前页
+        $page = ArrayHelper::getValue($paramse, 'page', 1);
+        // 返回个数
+        $limit = ArrayHelper::getValue($paramse, 'limit', 6);
         
         // 查询课程
         $query = $this->createCourseQuery($name)->addSelect([new Expression("1 search_typ")]);
@@ -59,10 +64,17 @@ class GetSearchInfo extends BaseAction
         $query->union($topQuery);
         // 合并查询结果
         $resultQuery = (new Query())->from(['unionQuery' => $query])
-            ->filterWhere(['unionQuery.search_typ' => explode(',', $searchType)])
-            ->all();
+            ->filterWhere(['unionQuery.search_typ' => explode(',', $searchType)]);
+        // 查询的总数量
+        $totalCount = $resultQuery->count();
+        // 分页
+        $resultQuery->offset(($page - 1) * $limit)->limit($limit);
         
-        return $resultQuery;
+        return [
+            'page' => $page,
+            'total_count' => $totalCount,
+            'list' => $resultQuery->all(),
+        ];
     }
     
     /**

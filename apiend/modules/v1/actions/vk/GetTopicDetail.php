@@ -22,14 +22,19 @@ class GetTopicDetail extends BaseAction
 
     public function run()
     {
+        // 专题id
         $topic_id = $this->getSecretParam('topic_id');
+        // 当前页
+        $page = $this->getSecretParam('page', 1);
+        // 返回个数
+        $limit = $this->getSecretParam('limit', 6);
 
         /**
          * 返回 专题数据，专题里面的课程数据
          */
         $data = [
             'topic' => $this->getTopicDetail($topic_id),
-            'courses' => $this->getTopicCourses($topic_id)
+            'courses' => $this->getTopicCourses($topic_id, $page, $limit)
         ];
 
         return new Response(Response::CODE_COMMON_OK, null, $data);
@@ -51,15 +56,19 @@ class GetTopicDetail extends BaseAction
     /**
      * 获取所有专题课程
      * @param int $topic_id
+     * @param int $page
+     * @param int $limit
      * @return array
      */
-    private function getTopicCourses($topic_id)
+    private function getTopicCourses($topic_id, $page, $limit)
     {
         $courses = TopicCourse::find()->select([
-            'Course.id', 'Course.cover_url AS thumb', 'Course.name',
-            'Course.teacher_name','Course.learning_count','Course.url'
-        ])->leftJoin(['Course' => Course::tableName()], 'Course.id = course_id')
-        ->where(['topic_id' => $topic_id,'is_del' => 0])->asArray()->all();
+                'Course.id', 'Course.cover_url AS thumb', 'Course.name',
+                'Course.teacher_name','Course.learning_count','Course.url'
+            ])->leftJoin(['Course' => Course::tableName()], 'Course.id = course_id')
+            ->where(['topic_id' => $topic_id,'is_del' => 0])
+            ->offset(($page - 1) * $limit)->limit($limit)
+            ->asArray()->all();
 
         return $courses;
     }

@@ -40,9 +40,9 @@ class GetCourseDetail extends BaseAction
     private function getCourseDetail($course_id)
     {
         $detail = Course::find()->select([
-            'name', 'cover_url', 'introduction', 'url'
-        ])->where(['id' => $course_id, 'type' => 1])
-        ->asArray()->one();
+                'id', 'name', 'cover_url', 'introduction', 'url'
+            ])->where(['id' => $course_id, 'type' => 1])
+            ->asArray()->one();
         
         return $detail;
     }
