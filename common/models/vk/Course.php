@@ -2,6 +2,7 @@
 
 namespace common\models\vk;
 
+use common\utils\I18NUitl;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -53,7 +54,9 @@ class Course extends ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'suggest_time', 'learning_count', 'play_count', 'favorite_count', 'like_count', 'comment_count', 'is_recommend', 'is_publish', 'created_at', 'updated_at'], 'integer'],
+            [['suggest_time', 'name', 'teacher_name', 'cover_url', 'teacher_avatar_url', 'url'], 'required'],
+            [['type', 'learning_count', 'play_count', 'favorite_count', 'like_count', 'comment_count', 'is_recommend', 'is_publish', 'created_at', 'updated_at'], 'integer'],
+            [['suggest_time'], 'integer', 'min' => 0],
             [['name', 'teacher_name'], 'string', 'max' => 50],
             [['cover_url', 'introduction', 'url', 'teacher_avatar_url'], 'string', 'max' => 255],
         ];
@@ -67,13 +70,13 @@ class Course extends ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'type' => Yii::t('app', 'Type'),
-            'name' => Yii::t('app', 'Name'),
-            'cover_url' => Yii::t('app', 'Cover Url'),
+            'name' => I18NUitl::t('app', '{Course}{Name}'),
+            'cover_url' => Yii::t('app', 'Cover Img'),
             'introduction' => Yii::t('app', 'Introduction'),
-            'suggest_time' => Yii::t('app', 'Suggest Time'),
-            'url' => Yii::t('app', 'Url'),
-            'teacher_name' => Yii::t('app', 'Teacher Name'),
-            'teacher_avatar_url' => Yii::t('app', 'Teacher Avatar Url'),
+            'suggest_time' => I18NUitl::t('app', '{Suggest}{Learning}{Time}'),
+            'url' => I18NUitl::t('app', '{Course}{Path}'),
+            'teacher_name' => I18NUitl::t('app', '{Teacher}{Name}'),
+            'teacher_avatar_url' => I18NUitl::t('app', '{Teacher}{Avatar}'),
             'learning_count' => Yii::t('app', 'Learning Count'),
             'play_count' => Yii::t('app', 'Play Count'),
             'favorite_count' => Yii::t('app', 'Favorite Count'),

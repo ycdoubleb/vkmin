@@ -363,21 +363,6 @@ a.desc:after {
 .clean-margin {
     margin: 0 !important; 
 }
-
-/*******************************************************************************
- *
- * 自定义select2的样式
- *
-********************************************************************************/
-.content-wrapper .select2-selection {
-    border-radius: 0px;
-}
-
-.content-wrapper .select2-container 
-.select2-selection--single .select2-selection__rendered {
-    margin-top: 0px;
-}
-
 /*******************************************************************************
  *
  * 自定义table的样式
@@ -386,13 +371,15 @@ a.desc:after {
 /************************************************************
  * GridView
 *************************************************************/
-.wsk-table{
-    /* table-layout: fixed;*/
-}
-.wsk-table > tbody {
-    font-size: 12px;
+.wsk-table{}
+
+.wsk-table.table-fixed {
+    table-layout: fixed;
 }
 
+.wsk-table > tbody {
+    font-size: 13px;
+}
 
 .wsk-table > thead > tr > th {
     background-color: #f2f2f2;
@@ -414,8 +401,10 @@ a.desc:after {
     word-wrap: break-word;
     border-color: #e4e4e4 !important;
 }
-
-.wsk-table .detail-th {
+/************************************************************
+ * DetailView
+*************************************************************/
+.wsk-table-detail > tbody .detail-th {
     width: 125px;
     color: #878787;
     border: 1px solid #e4e4e4 !important;
@@ -425,7 +414,7 @@ a.desc:after {
     background-color: #ffffff !important;
 }
 
-.wsk-table .detail-td {
+.wsk-table-detail > tbody .detail-td {
     width: 454px;
     border: 1px solid #e4e4e4 !important;
     font-weight: normal;
@@ -434,12 +423,18 @@ a.desc:after {
     white-space: inherit;
     background-color: #ffffff !important;
 }
-/************************************************************
- * DetailView
-*************************************************************/
+
+.wsk-table-detail > tbody .detail-des {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 60px;
+}
+
 .wsk-table-detail > tbody th {
     width: 130px;
     text-align: right;
+    vertical-align: middle !important;
 }
 .wsk-table-detail > tbody td {
     text-align: left;
@@ -450,13 +445,12 @@ a.desc:after {
  * 自定义form的样式
  *
 ********************************************************************************/
-/*
-.form .form-group {
+.wsk-form .form-group {
     margin-right: 0;
     margin-left: 0;
 }
 
-.form .form-group .form-label {
+.wsk-form .form-group .form-label {
     width: 125px;
     padding: 10px 0px;
     color: #999999;
@@ -464,25 +458,42 @@ a.desc:after {
     white-space: nowrap;
 }
 
-.form .form-group .form-must {
+.wsk-form .form-group .form-must {
     margin-right: 5px;
     font-size: 15px;
 }
 
-.form .form-group .form-checkbox-control {
+.wsk-form .form-group .form-checkbox-control {
     width: auto;
     height: auto; 
     border-color: transparent;
 }
 
-.form .dep-dropdowns {
+/************************************************************
+ * 自定义联动下拉框select的样式
+*************************************************************/
+.wsk-form .dep-dropdowns {
     display: inline-block;
     width: 145px;
     margin-right: 5px;
 }
-*/
-/* 自定义标签出现错误边框加颜色的样式 */
-.form .form-group.has-error .bootstrap-tagsinput{
+
+/************************************************************
+ * 自定义select2的样式
+*************************************************************/
+.content-wrapper .select2-selection {
+    border-radius: 0px;
+}
+
+.content-wrapper .select2-container 
+.select2-selection--single .select2-selection__rendered {
+    margin-top: 0px;
+}
+
+/************************************************************
+ * 自定义标签出现错误边框加颜色的样式 
+*************************************************************/
+.wsk-form .form-group.has-error .bootstrap-tagsinput{
     border-color: #dd4b39;
     box-shadow: none;
 }

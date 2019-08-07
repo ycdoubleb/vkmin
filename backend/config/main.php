@@ -96,10 +96,13 @@ return [
 //            'class' => 'backend\modules\helpcenter_admin\Module',
 //        ],
         //reids缓存管理
-        'rediscache_admin' => [
-            'class' => 'backend\modules\rediscache_admin\Module',
+//        'rediscache_admin' => [
+//            'class' => 'backend\modules\rediscache_admin\Module',
+//        ],
+        // 微课模块
+        'micro_lesson' => [
+            'class' => 'backend\modules\micro_lesson\Module',
         ],
-        
     ],
     'params' => $params,
     'as access' => [

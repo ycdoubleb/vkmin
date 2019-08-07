@@ -47,25 +47,34 @@ use common\widgets\Menu;
                         'icon' => 'bars',
                         'url' => '#',
                         'items' => [
-                            ['label' => '配置管理', 'icon' => 'circle-o', 'url' => ['/system_admin/config/index'],],
-                            ['label' => '日常任务', 'icon' => 'circle-o', 'url' => ['/system_admin/crontab/index'],],
+                            ['label' => '配置管理', 'icon' => 'cogs', 'url' => ['/system_admin/config/index'],],
+                            ['label' => '日常任务', 'icon' => 'tasks', 'url' => ['/system_admin/crontab/index'],],
                             ['label' => '数据库备份', 'icon' => 'database', 'url' => ['/system_admin/db-backup/index']],
 //                            ['label' => 'redis缓存管理', 'icon' => 'circle-o', 'url' => ['/rediscache_admin/acl/index']],
-                            ['label' => 'Banner管理', 'icon' => 'circle-o', 'url' => ['/system_admin/banner/index']],
-                            ['label' => '上传文件管理', 'icon' => 'circle-o', 'url' => ['/system_admin/uploadfile/index']]
+                            ['label' => 'Banner管理', 'icon' => 'picture-o', 'url' => ['/system_admin/banner/index']],
+                            ['label' => '上传文件管理', 'icon' => 'cloud-upload', 'url' => ['/system_admin/uploadfile/index']]
                         ],
                     ],
                     [
-                        'label' => '权限与组织管理',
+                        'label' => '权限与组织',
                         'icon' => 'bars',
                         'url' => '#',
                         'items' => [
-                            ['label' => '用户列表', 'icon' => 'circle-o', 'url' => ['/user_admin/default/index'],],
-                            ['label' => '用户角色', 'icon' => 'circle-o', 'url' => ['/rbac/user-role/index'],],
-                            ['label' => '角色列表', 'icon' => 'circle-o', 'url' => ['/rbac/role/index'],],
-                            ['label' => '权限列表', 'icon' => 'circle-o', 'url' => ['/rbac/permission/index'],],
-                            ['label' => '路由列表', 'icon' => 'circle-o', 'url' => ['/rbac/route/index'],],
-                            ['label' => '分组列表', 'icon' => 'circle-o', 'url' => ['/rbac/auth-group/index'],],
+                            ['label' => '用户列表', 'icon' => 'users', 'url' => ['/user_admin/default/index'],],
+                            ['label' => '用户角色', 'icon' => 'id-card', 'url' => ['/rbac/user-role/index'],],
+                            ['label' => '角色列表', 'icon' => 'user-circle', 'url' => ['/rbac/role/index'],],
+                            ['label' => '权限列表', 'icon' => 'lock', 'url' => ['/rbac/permission/index'],],
+                            ['label' => '路由列表', 'icon' => 'chain-broken', 'url' => ['/rbac/route/index'],],
+                            ['label' => '分组列表', 'icon' => 'window-restore', 'url' => ['/rbac/auth-group/index'],],
+                        ],
+                    ],
+                    [
+                        'label' => '微课管理',
+                        'icon' => 'bars',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => '课程列表', 'icon' => 'book', 'url' => ['/micro_lesson/course/index'],],
+                            ['label' => '专题管理', 'icon' => 'commenting', 'url' => ['/micro_lesson/topic/index'],],
                         ],
                     ],
                     [

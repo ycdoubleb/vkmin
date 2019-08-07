@@ -2,6 +2,7 @@
 
 namespace common\models\vk;
 
+use common\utils\I18NUitl;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -46,6 +47,7 @@ class Topic extends ActiveRecord
     public function rules()
     {
         return [
+            [['name', 'cover_url'], 'required'],
             [['learning_count', 'play_count', 'favorite_count', 'like_count', 'comment_count', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['cover_url', 'introduction'], 'string', 'max' => 255],
@@ -59,8 +61,8 @@ class Topic extends ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'cover_url' => Yii::t('app', 'Cover Url'),
+            'name' => I18NUitl::t('app', '{Topic}{Name}'),
+            'cover_url' => I18NUitl::t('app', '{Topic}{Cover Img}'),
             'introduction' => Yii::t('app', 'Introduction'),
             'learning_count' => Yii::t('app', 'Learning Count'),
             'play_count' => Yii::t('app', 'Play Count'),

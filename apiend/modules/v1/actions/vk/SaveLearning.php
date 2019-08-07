@@ -45,17 +45,17 @@ class SaveLearning extends BaseAction {
                     if ($model->save()) {
                         $couser = Course::findOne(['id' => $course_id]);
                         $couser->learning_count = $couser->learning_count + 1;
-                        $couser->update();
+                        $couser->update(true, ['learning_count']);
                     }
                 }
                 $trans->commit();  //提交事务
                 return new Response(Response::CODE_COMMON_OK, null, $model->toArray());
             } catch (Exception $ex) {
                 $trans->rollBack(); //回滚事务
-                return new ApiResponse(ApiResponse::CODE_COMMON_SAVE_DB_FAIL, $ex->getMessage(), $ex->getTraceAsString());
+                return new Response(Response::CODE_COMMON_SAVE_DB_FAIL, $ex->getMessage(), $ex->getTraceAsString());
             }
         }else{
-            return new ApiResponse(ApiResponse::CODE_COMMON_UNKNOWN, '未知错误', ['course_id' => $course_id, 'user_id' => $user_id]);
+            return new Response(Response::CODE_COMMON_UNKNOWN, '未知错误', ['course_id' => $course_id, 'user_id' => $user_id]);
         }  
     }
 }
