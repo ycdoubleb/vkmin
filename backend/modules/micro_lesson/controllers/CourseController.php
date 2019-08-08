@@ -118,9 +118,7 @@ class CourseController extends GridViewChangeSelfController
     public function actionPublish($ids)
     {
         $countNum = Course::updateAll(['is_publish' => 1], ['id' => explode(',', $ids)]);
-        if($countNum > 0){
-            return $this->redirect(['index']);
-        }
+        return $this->redirect(['index']);
     }
     
     /**
@@ -131,9 +129,7 @@ class CourseController extends GridViewChangeSelfController
     public function actionDownshelf($ids)
     {
         $countNum = Course::updateAll(['is_publish' => 0], ['id' => explode(',', $ids)]);
-        if($countNum > 0){
-            return $this->redirect(['index']);
-        }
+        return $this->redirect(['index']);
     }
 
     /**

@@ -75,6 +75,9 @@ class TopicCourseSearch extends TopicCourse
         
         // 模糊查询
         $query->andFilterWhere(['like', 'Course.name', $this->course_name]);
+        
+        // 过滤重复
+        $query->with('course');
 
         return $dataProvider;
     }

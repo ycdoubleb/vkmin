@@ -81,28 +81,15 @@ class TopicCourseController extends Controller
      */
     public function actionAdd($topic_id)
     {
-        // 返回json格式
-        \Yii::$app->response->format = 'json';
-
-        try {
-            if(Yii::$app->request->isPost){
-                // 课程id
-                $courseId = ArrayHelper::getValue(Yii::$app->request->post(), 'course_id');
-
-                $model = $this->findModel($topic_id, $courseId);
-                // 判断是否为新建
-                if(!$model->isNewRecord){
-                    $model->is_del = 0;
-                }
-
-                if($model->save()){
-                    return new ApiResponse(ApiResponse::CODE_COMMON_OK, null, $model->toArray());
-                }
-            }
+        if(Yii::$app->request->isPost){
+            // 课程id
+            $courseIds = ArrayHelper::getValue(Yii::$app->request->post(), 'course_id');
             
-        } catch (Exception $ex) {
-            return new ApiResponse(ApiResponse::CODE_COMMON_SAVE_DB_FAIL, $ex->getMessage(), $ex->getTraceAsString());
+            $this->saveTopicCourse($topic_id, $courseIds);
+            
         }
+        
+        $this->redirect(['index', 'topic_id' => $topic_id]);
     }
     
     /**
@@ -114,25 +101,39 @@ class TopicCourseController extends Controller
     public function actionMoveout($topic_id, $ids)
     {
         $countNum = TopicCourse::updateAll(['is_del' => 1], ['id' => explode(',', $ids)]);
-        if($countNum > 0){
-            return $this->redirect(['index', 'topic_id' => $topic_id]);
-        }
+        return $this->redirect(['index', 'topic_id' => $topic_id]);
     }
     
     /**
-     * Finds the TopicCourse model based on its primary key value.
-     * @param integer $id
-     * @param integer $course_id
-     * @return TopicCourse the loaded model
+     * 保存专题课程
+     * @param int $topic_id
+     * @param array $course_ids
      */
-    protected function findModel($topic_id, $course_id)
+    protected function saveTopicCourse($topic_id, $course_ids)
     {
-        if (($model = TopicCourse::findOne(['topic_id' => $topic_id, 'course_id' => $course_id])) !== null) {
-            return $model;
-        }else{
-            return new TopicCourse(['topic_id' => $topic_id, 'course_id' => $course_id]);
+        // 查询存在的课程
+        $topicCourse = TopicCourse::findAll(['topic_id' => $topic_id, 'course_id' => $course_ids]);
+        // 获取存在的课程id
+        $existCourseIds = ArrayHelper::getColumn($topicCourse, 'course_id');
+        $rows = [];  
+        foreach ($course_ids as $id) {
+            if(!in_array($id, $existCourseIds)){
+                $rows[] = [
+                    'topic_id' => $topic_id,
+                    'course_id' => $id
+                ];
+            }
         }
-
+        // 非空插入
+        if(!empty($rows)){
+            Yii::$app->db->createCommand()
+                ->batchInsert(TopicCourse::tableName(), array_keys($rows[0]),$rows)
+                ->execute();
+        }
+        // 非空更新已存在的数据
+        if(!empty($existCourseIds)){
+            TopicCourse::updateAll(['is_del' => 0], ['topic_id' => $topic_id, 'course_id' => $existCourseIds]);
+        }
     }
 
     /**

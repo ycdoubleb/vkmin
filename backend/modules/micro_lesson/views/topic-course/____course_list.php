@@ -117,20 +117,15 @@ use yii\widgets\ActiveForm;
             </div>
             <!--模态框尾部-->
             <div id="myModalFooter" class="modal-footer">
-                <!--进度条-->
-                <div id="progress" class="progress hidden">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%; line-height: 18px">0%</div>
-                </div>
                 
-                <div id="btn_group">
-                    <?php
-                        echo Html::button(Yii::t('app', 'Close'), ['id' => 'btn_close', 'class' => 'btn btn-default btn-flat', 'data-dismiss' => 'modal']);
-                        echo ' ' . Html::a(Yii::t('app', 'Confirm'), ['add', 'topic_id' => $topicId], [
-                            'class' => 'btn btn-primary btn-flat',
-                            'onclick' => 'submitSave(this);return false;'
-                        ]);
-                    ?>
-                </div>
+                <?php
+                    echo Html::button(Yii::t('app', 'Close'), ['id' => 'btn_close', 'class' => 'btn btn-default btn-flat', 'data-dismiss' => 'modal']);
+                    echo ' ' . Html::a(Yii::t('app', 'Confirm'), ['add', 'topic_id' => $topicId], [
+                        'class' => 'btn btn-primary btn-flat',
+                        'onclick' => 'submitSave(this);return false;'
+                    ]);
+                ?>
+                
             </div>
 
         </div>
@@ -155,36 +150,10 @@ use yii\widgets\ActiveForm;
      */
     function submitSave(elem) {
         var val = getCheckBoxsCourse(),
-            url = $(elem).attr('href'),
-            maxNum = val.length,
-            currentNum = 0,
-            completeNum = 0,
-            loseNum = 0,
-            pro = 0;
+            url = $(elem).attr('href');
         // 当前选中一个才有效 
-        if (maxNum > 0) {
-            $('#btn_group').addClass('hidden');
-            $('#progress').removeClass('hidden');
-            $.each(val, function(index, elem){
-                $.post(url, {'course_id': elem}, function(res){
-                    if(res.code == '0'){
-                        completeNum = ++currentNum;
-                    }else{
-                        loseNum = ++currentNum;
-                    }
-                    // 计算进度值
-                    pro = parseInt((parseInt(completeNum) + parseInt(loseNum)) / maxNum * 100);
-                    // 设置进度条
-                    $('#progress').find('div.progress-bar').css({width: pro + '%'}).html(pro + '%');
-                    // 进度值为100时，关闭modal并刷新页面
-                    if(pro == 100){
-                        setTimeout(function(){
-                            hideModal();
-                            window.location.replace(window.location.href);
-                        }, 1000);
-                    }
-                });
-            });
+        if (val.length > 0) {
+            $.post(url, {'course_id': val});
         } else {
             alert("<?= Yii::t('app', 'Please select at least one.') ?>");
         }
