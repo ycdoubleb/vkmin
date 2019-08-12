@@ -46,16 +46,19 @@ class CourseSearch extends Course
      * @return ActiveDataProvider
      */
     public function search($params)
-    {
+    {        
         $query = Course::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'key' => 'id'
+            'key' => 'id',
+            'pagination' => [
+                'defaultPageSize' => isset($params['isTopicCourse']) && $params['isTopicCourse'] ? 6 : 20,
+            ]
         ]);
-
+        
         $this->load($params);
         
         if (!$this->validate()) {
@@ -64,6 +67,11 @@ class CourseSearch extends Course
             return $dataProvider;
         }
 
+        $query->select([
+            'id', 'name', 'cover_url', 'teacher_name', 'teacher_avatar_url',
+            'suggest_time', 'is_recommend', 'is_publish'
+        ]);
+        
         // 条件查询
         $query->andFilterWhere([
             'is_recommend' => $this->is_recommend,

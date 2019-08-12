@@ -64,7 +64,7 @@ class TopicCourseController extends Controller
     public function actionCourseList($topic_id)
     {
         $searchModel = new CourseSearch(['is_publish' => 1]);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(array_merge(['isTopicCourse' => true], Yii::$app->request->queryParams));
         
         return $this->renderAjax('____course_list', [
             'topicId' => $topic_id,

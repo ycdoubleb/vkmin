@@ -56,7 +56,7 @@ class TopicCourseSearch extends TopicCourse
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'key' => 'id'
+            'key' => 'id',
         ]);
 
         $this->load($params);

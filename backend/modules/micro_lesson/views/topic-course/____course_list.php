@@ -16,7 +16,6 @@ use yii\widgets\ActiveForm;
 
 ?>
 <div class="select-course-list">
-
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <!--模态框头部-->
@@ -28,14 +27,15 @@ use yii\widgets\ActiveForm;
             </div>
             <!--模态框body-->
             <div id="myModalBody" class="modal-body">
-                <div class="col-sm-12 clean-padding" style="margin-bottom: 20px;">
+                <div class="col-sm-12 clean-padding">
                     <?php
                         // 表单
                         $form = ActiveForm::begin([
                             'method' => 'get',
                             'options' => [
                                 'id' => 'wsk_course_form',
-                                'class' => 'wsk-form form-horizontal col-sm-12 clean-padding'
+                                'class' => 'wsk-form form-horizontal col-sm-12 clean-padding',
+                                'onkeydown' => 'if(event.keyCode==13) return false;'
                             ],
                         ]);
 
@@ -45,7 +45,7 @@ use yii\widgets\ActiveForm;
                             'template' => "<div class=\"col-sm-12 clean-padding\">{input}</div>",
                         ])->textInput([
                             'placeholder' => '课程或老师名',
-                            'onchange' => 'submitForm()'
+                            'onchange' => 'submitCourseForm()'
                         ]);
 
                         ActiveForm::end();
@@ -56,8 +56,16 @@ use yii\widgets\ActiveForm;
                 <?= GridView::widget([
                     'id' => 'course_list',
                     'dataProvider' => $dataProvider,
-                    'tableOptions' => ['class' => 'table wsk-table table-striped table-bordered'],
+                    'tableOptions' => [
+                        'class' => 'table wsk-table table-striped table-bordered',
+//                        'style' => 'margin-bottom:5px;'
+                    ],
                     'layout' => "{items}\n{summary}\n{pager}",
+                    'pager' => [
+                        'options' => ['class' => 'pagination clean-margin'],
+                        'linkOptions' => ['onclick' => 'clickPageReload(this);return false;'],
+                        'maxButtonCount' => 5,
+                    ],
                     'columns' => [
                         [
                             'class' => 'yii\grid\CheckboxColumn',
@@ -68,13 +76,15 @@ use yii\widgets\ActiveForm;
                         ],
 
                         [
-                            'attribute' => 'name',
+                            'label' => I18NUitl::t('app', '{Course}{Name}'),
+                            'value' => function($model){
+                                return $model->name;
+                            },
                             'headerOptions' => [
                                 'style' => 'width:260px;'
                             ]
                         ],
                         [
-                            'attribute' => 'cover_url',
                             'label' => Yii::t('app', 'Cover Img'),
                             'format' => 'raw',
                             'value' => function($model){
@@ -85,14 +95,15 @@ use yii\widgets\ActiveForm;
                             ]
                         ],
                         [
-                            'attribute' => 'teacher_name',
                             'label' => I18NUitl::t('app', '{Teacher}{Name}'),       
+                            'value' => function($model){
+                                return $model->teacher_name;
+                            },
                             'headerOptions' => [
                                 'style' => 'width:170px;'
                             ]
                         ], 
                         [
-                            'attribute' => 'teacher_avatar_url',
                             'label' => I18NUitl::t('app', '{Teacher}{Avatar}'),
                             'format' => 'raw',
                             'value' => function($model){
@@ -103,7 +114,6 @@ use yii\widgets\ActiveForm;
                             ]
                         ],   
                         [
-                            'attribute' => 'suggest_time',
                             'label' => I18NUitl::t('app', '{Suggest}{Learning}{Time}'),
                             'value' => function($model){
                                 return $model->suggest_time / 60 . '分钟';
@@ -133,18 +143,17 @@ use yii\widgets\ActiveForm;
 </div>
 
 <script type="text/javascript">
-
+    
     /**
      * 提交表单
      * @returns {undefined}
      */
-    function submitForm() {
-        // 重新load页面
-        $('.select-course-list').load('<?= Url::to(['course-list']) ?>', $('#wsk_course_form').serialize());
+    function submitCourseForm() {
+        $('.myModal').modal("show").load('<?= Url::to(['course-list']) ?>', $('#wsk_course_form').serialize());
     }
 
     /**
-     * 单击事件
+     * 单击保存
      * @param {Object} elem
      * @returns {undefined}
      */
@@ -173,7 +182,16 @@ use yii\widgets\ActiveForm;
             }
         }
 
-        return val
+        return val;
     }
-
+    
+    /**
+     * 单击分页重新load页面
+     * @param {Object} elem
+     * @returns {undefined}     
+     */
+    function clickPageReload(elem){
+        $('.myModal').modal("show").load($(elem).attr('href'));
+    }
+   
 </script>

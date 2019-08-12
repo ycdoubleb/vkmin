@@ -47,10 +47,14 @@ class GetMyCourse extends BaseAction
      */
     private function getLearningLog($user_id)
     {
-        $learnLog = CourseLearning::find()->select([
-            'COUNT(id) AS course_num', 'ROUND(SUM(learning_time / 60), 2) AS learning_time'
-        ])->where(['user_id' => $user_id, 'is_del' => 0])->asArray()->one();
+        // 计算学习时长
+        $learning_time = 'ROUND(SUM(learning_time / 60), 2)';
         
+        $learnLog = CourseLearning::find()->select([
+                'COUNT(id) AS course_num', "IF($learning_time IS NULL, 0.00, $learning_time) AS learning_time"
+            ])->where(['user_id' => $user_id, 'is_del' => 0])
+            ->asArray()->one();
+
         return $learnLog;
     }
     
